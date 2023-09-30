@@ -2,45 +2,14 @@ import requests, time
 import bs4
 import lxml
 from openpyxl import Workbook, load_workbook
+from lines import peirano_lines
 
-
+tienda ='Foschia'
+brand = 'peirano'
 foschia_peirano_total = []
 prod_data = [
-    ['Tienda','Marca', 'Linea', 'Nombre', 'Precio', 'Link',]
+]
 
-]
-lineas = [
-'12000',
-'3000',
-'8000',
-'1100',
-'11000',
-'Doble Johnson',
-'Santander',
-'Marbella',
-'Toledo',
-'Mallorca',
-'Murcia',
-'Dique',
-'Valencia',
-'Colors',
-'Cuina',
-'Renacer',
-'Verin',
-'Vera',
-'Murcia',
-'Lago',
-'Soria',
-'Black Velvet',
-'Fabric',
-'Mora',
-'Vigo',
-'Triumph',
-'Castilla',
-'Burgos',
-'Bilbao',
-'Crown',
-]
 
 for page_number in range(1,14):
     foschia_peirano_total.append(f'https://foschia.com.ar/search/all/peirano?page={page_number}')
@@ -64,13 +33,13 @@ for page in foschia_peirano_total:
             'div', class_='price')
         
         def line_type(name):
-            for n in lineas:
+            for n in peirano_lines:
                 if n.lower() in name.lower():
                     return n 
               
         for prod, price in zip(prod_name, prod_price):
             price_1 = price.text.strip()[2:]
-            prod_data.append(['Foschia', 'Peirano', line_type(prod.text.strip()), prod.text.strip(), price_1, prod_link['href']])
+            prod_data.append([tienda, brand, line_type(prod.text.strip()), prod.text.strip(), price_1, prod_link['href']])
     print('next page download in 5 seconds')
     time.sleep(5)
 

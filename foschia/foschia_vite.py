@@ -2,33 +2,13 @@ import requests, time
 import bs4
 import lxml
 from openpyxl import Workbook, load_workbook
-
-
+from lines import vite_lines
+tienda ='Foschia'
+brand = 'vite'
 foschia_vite_total = []
 prod_data = [
-    ['Linea', 'Nombre', 'Precio', 'Link',]
+]
 
-]
-lineas = [
-'Aspen',
-'Kansas',
-'Amazonia',
-'Tatami',
-'Loft',
-'Atlas',
-'Trafalgar',
-'Nordica',
-'Tabla',
-'London',
-'Blend'
-'Sidney',
-'Zen',
-'Ravenna',
-'Belen',
-'Manaos',
-'Leblon',
-'Recife',
-]
 
 for page_number in range(1,7):
     foschia_vite_total.append(f'https://foschia.com.ar/search/all/vite?page={page_number}')
@@ -52,13 +32,13 @@ for page in foschia_vite_total:
             'div', class_='price')
         
         def line_type(name):
-            for n in lineas:
+            for n in vite_lines:
                 if n.lower() in name.lower():
                     return n 
               
         for prod, price in zip(prod_name, prod_price):
             price_1 = price.text.strip()[2:]
-            prod_data.append([line_type(prod.text.strip()), prod.text.strip(), price_1, prod_link['href']])
+            prod_data.append([tienda, brand, line_type(prod.text.strip()), prod.text.strip(), price_1, prod_link['href']])
     print('next page download in 5 seconds')
     time.sleep(5)
 
@@ -69,7 +49,7 @@ for page in foschia_vite_total:
 #ws.title = 'vite'
 
 wb = load_workbook(filename='foschia.xlsx')
-ws = wb.create_sheet('vite')
+ws = wb.active
 
 for row in prod_data:
     ws.append(row)

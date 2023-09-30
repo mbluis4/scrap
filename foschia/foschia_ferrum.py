@@ -2,47 +2,22 @@ import requests, time
 import bs4
 import lxml
 from openpyxl import Workbook, load_workbook
+from lines import ferrum_lines
 
 
-foschia_ferrum_total = []
-prod_data = [
-    ['Linea', 'Nombre', 'Precio', 'Link',]
+foschia_ferrum_url = []
 
-]
-lineas = [
-'Milena',
-'Fontana',
-'Marina',
-'Marina de colgar',
-'Temple',
-'Trento',
-'Varese',
-'Veneto',
-'Bari',
-'Bari de colgar',
-'Mayo',
-'Andina',
-'Espacio',
-'Persis',
-'Armonica',
-'Venecia',
-'Avignon',
-'Cadria',
-'Niza',
-'Varese',
-'Traful',
-'Milos',
-'Tori',
-'Atuel',
-'Carilo',
-'Limoges',
-]
+prod_data = []
+
+brand ='ferrum'
+
+tienda = 'Foschia'
 
 for page_number in range(1,27):
-    foschia_ferrum_total.append(f'https://foschia.com.ar/search/all/ferrum?page={page_number}')
+    foschia_ferrum_url.append(f'https://foschia.com.ar/search/all/ferrum?page={page_number}')
 
 
-for page in foschia_ferrum_total:
+for page in foschia_ferrum_url:
     try:
         print(f'descargando desde {page}')
         response = requests.get(page)
@@ -60,13 +35,13 @@ for page in foschia_ferrum_total:
             'div', class_='price')
         
         def line_type(name):
-            for n in lineas:
+            for n in ferrum_lines:
                 if n.lower() in name.lower():
                     return n 
               
         for prod, price in zip(prod_name, prod_price):
             price_1 = price.text.strip()[2:]
-            prod_data.append([line_type(prod.text.strip()), prod.text.strip(), price_1, prod_link['href']])
+            prod_data.append([tienda, brand, line_type(prod.text.strip()), prod.text.strip(), price_1, prod_link['href']])
     print('next page download in 5 seconds')
     time.sleep(5)
 
@@ -77,7 +52,7 @@ for page in foschia_ferrum_total:
 #ws.title = 'ferrum'
 
 wb = load_workbook(filename='foschia.xlsx')
-ws = wb.create_sheet('ferrum')
+ws = wb.active
 
 for row in prod_data:
     ws.append(row)

@@ -2,26 +2,13 @@ import requests, time
 import bs4
 import lxml
 from openpyxl import Workbook, load_workbook
+from lines import ilva_lines
 
-
+tienda = 'Foschia'
+brand = 'ilva'
 foschia_ilva_total = []
-prod_data = [
-    ['Linea', 'Nombre', 'Precio', 'Link',]
+prod_data = []
 
-]
-lineas = [
-'Mediterranea',
-'Greendwich',
-'Estocolmo',
-'Burlington',
-'Tribeca',
-'Augustus',
-'Glam',
-'Lounge',
-'Pampa',
-'Silver',
-'Ecoland',
-]
 
 for page_number in range(1,7):
     foschia_ilva_total.append(f'https://foschia.com.ar/search/all/ilva?page={page_number}')
@@ -45,13 +32,13 @@ for page in foschia_ilva_total:
             'div', class_='price')
         
         def line_type(name):
-            for n in lineas:
+            for n in ilva_lines:
                 if n.lower() in name.lower():
                     return n 
               
         for prod, price in zip(prod_name, prod_price):
             price_1 = price.text.strip()[2:]
-            prod_data.append([line_type(prod.text.strip()), prod.text.strip(), price_1, prod_link['href']])
+            prod_data.append([tienda, brand, line_type(prod.text.strip()), prod.text.strip(), price_1, prod_link['href']])    
     print('next page download in 5 seconds')
     time.sleep(5)
 
@@ -62,7 +49,7 @@ for page in foschia_ilva_total:
 #ws.title = 'ilva'
 
 wb = load_workbook(filename='foschia.xlsx')
-ws = wb.create_sheet('ilva')
+ws = wb.active
 
 for row in prod_data:
     ws.append(row)
