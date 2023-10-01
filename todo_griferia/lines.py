@@ -1,4 +1,7 @@
-fv_lines = [
+import pprint
+
+lines = {
+    'fv': [
     'california',
     'allegro',
     'arizona',
@@ -17,9 +20,8 @@ fv_lines = [
     'epuyen',
     'alerce',
     'oregon',
-]
-
-ferrum_lines = [
+    ],
+    'ferrum': [
 'Milena',
 'Fontana',
 'Marina',
@@ -46,9 +48,8 @@ ferrum_lines = [
 'Atuel',
 'Carilo',
 'Limoges',
-]
-
-hidromet_lines = [
+],
+'hidromet': [
 'Texture',
 'Block',
 'Luxury',
@@ -72,9 +73,8 @@ hidromet_lines = [
 'Armony',
 'Viena',
 'Self'
-]
-
-ilva_lines = [
+],
+'ilva': [
 'Mediterranea',
 'Greendwich',
 'Estocolmo',
@@ -86,9 +86,8 @@ ilva_lines = [
 'Pampa',
 'Silver',
 'Ecoland',
-]
-
-peirano_lines = [
+],
+'peirano': [
 '12000',
 '3000',
 '8000',
@@ -119,9 +118,28 @@ peirano_lines = [
 'Burgos',
 'Bilbao',
 'Crown',
-]
-
-vite_lines = [
+],
+'vite':[
+'Aspen',
+'Kansas',
+'Amazonia',
+'Tatami',
+'Loft',
+'Atlas',
+'Trafalgar',
+'Nordica',
+'Tabla',
+'London',
+'Blend'
+'Sidney',
+'Zen',
+'Ravenna',
+'Belen',
+'Manaos',
+'Leblon',
+'Recife',
+],
+'cerro': [
 'Aspen',
 'Kansas',
 'Amazonia',
@@ -141,24 +159,7 @@ vite_lines = [
 'Leblon',
 'Recife',
 ]
+}
 
-cerro_lines = [
-'Aspen',
-'Kansas',
-'Amazonia',
-'Tatami',
-'Loft',
-'Atlas',
-'Trafalgar',
-'Nordica',
-'Tabla',
-'London',
-'Blend'
-'Sidney',
-'Zen',
-'Ravenna',
-'Belen',
-'Manaos',
-'Leblon',
-'Recife',
-]
+pp = pprint.PrettyPrinter(indent=4)
+pp.pprint(lines)
