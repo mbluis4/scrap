@@ -36,7 +36,7 @@ def parse_page(s, brand):
                 if n.lower() in name.lower():
                     return n         
         prod_data.append([tienda, brand, line_type(prod_name.text.strip()), prod_name.text.strip(), 
-                          int(prod_price.text.strip()[1:].replace(',','').replace('.','')), f'www.todogriferia.com{prod_link["href"]}'])
+                          prod_price.text.strip()[1:].replace(',','').replace('.',','), f'www.todogriferia.com{prod_link["href"]}'])
     return prod_data
     
 

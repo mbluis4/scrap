@@ -161,5 +161,3 @@ lines = {
 ]
 }
 
-pp = pprint.PrettyPrinter(indent=4)
-pp.pprint(lines)
