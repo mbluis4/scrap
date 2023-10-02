@@ -43,7 +43,7 @@ for page in foschia_tendenza_url:
             price_1 = price.text.strip()[2:]
             prod_data.append([tienda, brand, line_type(prod.text.strip()), prod.text.strip(), price_1, prod_link['href']])
     print('next page download in 5 seconds')
-    time.sleep(5)
+    time.sleep(1)
 
 # saving to excel file
 

@@ -17,9 +17,9 @@ def get_page(brand):
         except:
             print('Page not found')
             continue
-    print('parsing html')
-    s = bs4.BeautifulSoup(response.text, 'lxml')
-    return parse_page(s, brand)
+        print('parsing html')
+        s = bs4.BeautifulSoup(response.text, 'lxml')
+        return parse_page(s, brand)
 
 def parse_page(s, brand):
     prod_data = [
