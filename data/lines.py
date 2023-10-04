@@ -1,21 +1,4 @@
 
-data = [
-    {
-        'vendedor': 'Foschia',
-        'id': '1a',
-        'base_url': 'https://foschia.com.ar/search/all/fv?page=' 
-    },
-    {
-        'vendedor': 'Sanitarios Arrieta',
-        'id': '2a',
-        'base_url': 'https://www.sanitariosarieta.com.ar/'
-    },
-    {
-        'vendedor': 'Blaisten',
-        'id': '3a',
-        'base_url': 'https://www.sanitariosarieta.com.ar/'
-    }
-]
 
 
 
@@ -177,6 +160,32 @@ lines = {
 'Manaos',
 'Leblon',
 'Recife',
+],
+'tendenza': [
+    'Castilla',
+    'Velvet',
+],
+'alberdi': [
+    'Marrakech',
+    'Mayólica',
+    'Fusion',
+    'Volga',
+    'Retro',
+    'Madison',
+    'California',
+    'Berlin',
+    'Biloba',
+    'Metropolitan'
+],
+'roca': [
+    'Monaco',
+    'Inspira',
+    'Mencia',
+    'Senso',
+    'Victoria',
+    'Coral',
+    'Atlas',
+    
 ]
 }
 

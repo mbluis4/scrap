@@ -4,17 +4,20 @@ import lxml
 from openpyxl import Workbook, load_workbook
 from data.lines import lines
 
-tienda = 'Tucson'
+tienda = 'Banchero'
 
 def get_page(brand):
-    base_url = 'https://tienda.tucsonsa.com/search/page/'
+    base_url = 'https://www.tienda.bancherosanitarios.com.ar/'
     urls = []
     prod_data = [
-    ['Tienda', 'Marca', 'Linea', 'Nombre', 'Precio', 'Link', 'Cuotas' ],
+    ['Tienda', 'Marca', 'Linea', 'Nombre', 'Precio', 'Link',],
     ]
 
-    for web_page in range(1,33):
-            urls.append(f'{base_url}{web_page}/?q={brand}&results_only=true&limit=12&theme=amazonas')
+    for web_page in range(0,13):
+        if web_page == 0:
+            urls.append(f'{base_url}{brand}_Desde_1_NoIndex_True')
+            continue
+        urls.append(f'{base_url}{brand}_Desde_{web_page*50+1}_NoIndex_True')   
 
     for page in urls:       
         try:
@@ -27,7 +30,7 @@ def get_page(brand):
         print('parsing html')
         s = bs4.BeautifulSoup(response.text, 'lxml')
         prod_data += parse_page(s, brand)
-        print('next page download in 5 seconds...')
+        print('next page download in 2 seconds...')
         time.sleep(2)
     return prod_data
     
@@ -35,16 +38,15 @@ def get_page(brand):
 def parse_page(s, brand):
     page_data = []   
     for item in s.find_all(
-            'div', class_='item-description'):
+            'div', class_='ui-search-result__content-wrapper shops__result-content-wrapper'):
         prod_link = item.find('a', href=True)
-        prod_name = item.find('div', class_='js-item-name')
+        prod_name = item.find('h2', class_='ui-search-item__title')
         prod_price = item.find(
-            'span', class_='js-price-display')
+            'span', class_='andes-money-amount__fraction')
         if prod_price is None:
             prod_price_f = 'sin precio'
         else:
-            prod_price_f = prod_price.text.strip()[1:]  
-         
+            prod_price_f = prod_price.text.strip() 
         def line_type(name):
             for n in lines[brand]:
                 if n.lower() in name.lower():
@@ -57,7 +59,8 @@ def parse_page(s, brand):
 # saving to excel file
 def save_xls():
 
-    brands = ['ferrum', 'fv', 'hidromet', 'peirano', 'vite', 'cerro', 'ilva', 'tendenza', 'alberdi', ]
+    brands = ['ferrum', 'fv', 'roca',]
+   
     
     for brand in brands:
         data = get_page(brand)
