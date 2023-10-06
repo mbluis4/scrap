@@ -24,10 +24,14 @@ def get_page(brand):
         except requests.exceptions.HTTPError as err:
             print(err)
             continue
-        print('parsing html')
+        
         s = bs4.BeautifulSoup(response.text, 'lxml')
+        if s.find_all('a') == []:
+            print(f'end of {brand} pages')
+            break
+        print('parsing html')
         prod_data += parse_page(s, brand)
-        print('next page download in 5 seconds...')
+        print('next page download in 2 seconds...')
         time.sleep(2)
     return prod_data
     
@@ -57,7 +61,8 @@ def parse_page(s, brand):
 # saving to excel file
 def save_xls():
 
-    brands = ['ferrum', 'fv', 'hidromet', 'peirano', 'vite', 'cerro', 'ilva', 'tendenza', 'alberdi', ]
+    #brands = ['ferrum', 'fv', 'hidromet', 'peirano', 'vite', 'cerro', 'ilva', 'tendenza', 'alberdi', ]
+    brands = ['alberdi']
     
     for brand in brands:
         data = get_page(brand)
