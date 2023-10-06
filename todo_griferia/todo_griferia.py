@@ -17,6 +17,9 @@ def get_page(brand):
         except:
             print('Page not found')
             continue
+        if s.find_all('a') == []:
+            print(f'end of {brand} pages')
+            break
         print('parsing html')
         s = bs4.BeautifulSoup(response.text, 'lxml')
         return parse_page(s, brand)

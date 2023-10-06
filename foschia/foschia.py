@@ -14,7 +14,7 @@ def get_page(brand):
     ['Tienda', 'Marca', 'Linea', 'Nombre', 'Precio', 'Link',],
     ]
     
-    for web_page in range(1,2):
+    for web_page in range(1,40):
             urls.append(f'{base_url}{brand}?page={web_page}')
 
     for page in urls:       
@@ -25,6 +25,9 @@ def get_page(brand):
         except requests.exceptions.HTTPError as err:
             print(err)
             continue
+        if s.find_all('a') == []:
+            print(f'end of {brand} pages')
+            break
         print('parsing html')
         s = bs4.BeautifulSoup(response.text, 'lxml')
         prod_data += parse_page(s, brand)
