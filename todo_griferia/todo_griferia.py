@@ -2,7 +2,7 @@ import requests, os, time
 import bs4
 import lxml
 from openpyxl import Workbook, load_workbook
-from lines import lines
+from data.lines import lines
 
 tienda = 'Todo Griferia'
 
@@ -17,11 +17,11 @@ def get_page(brand):
         except:
             print('Page not found')
             continue
+        s = bs4.BeautifulSoup(response.text, 'lxml')
         if s.find_all('a') == []:
             print(f'end of {brand} pages')
             break
         print('parsing html')
-        s = bs4.BeautifulSoup(response.text, 'lxml')
         return parse_page(s, brand)
 
 def parse_page(s, brand):

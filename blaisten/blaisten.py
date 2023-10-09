@@ -25,11 +25,11 @@ def get_page(brand):
         except requests.exceptions.HTTPError as err:
             print(err)
             continue
+        print('parsing html')
+        s = bs4.BeautifulSoup(response.text, 'lxml')
         if s.find_all('a') == []:
             print(f'end of {brand} pages')
             break
-        print('parsing html')
-        s = bs4.BeautifulSoup(response.text, 'lxml')
         prod_data += parse_page(s, brand)
         print('next page download in 2 seconds...')
         time.sleep(2)

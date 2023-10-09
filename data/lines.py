@@ -1,7 +1,3 @@
-
-
-
-
 lines = {
     'fv': [
     'california',

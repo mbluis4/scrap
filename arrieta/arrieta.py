@@ -2,7 +2,7 @@ import requests, os, time
 import bs4
 import lxml
 from openpyxl import Workbook, load_workbook
-from lines import lines
+from data.lines import lines
 
 tienda = 'Sanitarios Arrieta'
 
@@ -26,9 +26,12 @@ def get_page(brand):
             response.raise_for_status()
         except requests.exceptions.HTTPError as err:
             print(err)
-            continue
+            break
         print('parsing html')
         s = bs4.BeautifulSoup(response.text, 'lxml')
+        if s.find_all('a') == []:
+            print(f'end of {brand} pages')
+            break
         prod_data += parse_page(s, brand)
     return prod_data
     

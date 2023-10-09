@@ -3,7 +3,6 @@ import bs4
 import lxml
 from openpyxl import Workbook, load_workbook
 from data.lines import lines
-from data.vendors import vendordata
 
 tienda = 'Foschia'
 
@@ -25,11 +24,11 @@ def get_page(brand):
         except requests.exceptions.HTTPError as err:
             print(err)
             continue
+        s = bs4.BeautifulSoup(response.text, 'lxml')
         if s.find_all('a') == []:
             print(f'end of {brand} pages')
             break
         print('parsing html')
-        s = bs4.BeautifulSoup(response.text, 'lxml')
         prod_data += parse_page(s, brand)
         print('next page download in 5 seconds...')
         time.sleep(2)

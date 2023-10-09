@@ -61,8 +61,8 @@ def parse_page(s, brand):
 # saving to excel file
 def save_xls():
 
-    #brands = ['ferrum', 'fv', 'hidromet', 'peirano', 'vite', 'cerro', 'ilva', 'tendenza', 'alberdi', ]
-    brands = ['alberdi']
+    brands = ['ferrum', 'fv', 'hidromet', 'peirano', 'vite', 'cerro', 'ilva', 'tendenza', 'alberdi', ]
+
     
     for brand in brands:
         data = get_page(brand)
