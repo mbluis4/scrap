@@ -14,12 +14,26 @@ def get_page(tienda, brand):
     def get_urls(tienda, brand):
         base_url = vendordata[tienda]['base_url']
         urls=[]
-        if tienda == 'Todo Griferia':
-            urls.append(f'{base_url}{brand}&start=0&sz=500')
-            return urls
-        for web_page in range(0,2):
-            urls.append(f'{base_url}{brand}_Desde_{web_page*50+1}')   
-        return urls
+        match tienda:
+            case 'Todo Griferia':
+                urls.append(f'{base_url}{brand}&start=0&sz=500')
+                return urls
+            case 'Sanitarios Arrieta':
+                for web_page in range(0,1):
+                    urls.append(f'{base_url}{brand}_Desde_{web_page*50+1}')   
+                    return urls
+            case 'Tucson':
+                for web_page in range(1,2): #33
+                    urls.append(f'{base_url}{web_page}/?q={brand}')
+                    return urls
+            case 'Blaisten':
+                for web_page in range(1,2): #8
+                    urls.append(f'{base_url}ft={brand}&PageNumber={web_page}')
+                    return urls
+            case 'Banchero':
+                for web_page in range(0,1):
+                    urls.append(f'{base_url}{brand}_Desde_{web_page*50+1}')   
+                    return urls
 
     for page in get_urls(tienda, brand):       
         try:
@@ -41,15 +55,15 @@ def get_page(tienda, brand):
     
 
 def parse_page(s, brand, tienda):
+    tags = vendordata[tienda]
     page_data = []   
     for item in s.find_all(
-            'div', class_='ui-search-result__content-wrapper shops__result-content-wrapper'):
+            'div', class_=tags['main_tag']):
         prod_link = item.find('a', href=True)
-        prod_name = item.find('h2', class_='ui-search-item__title')
+        prod_name = item.find(tags['name_tag'][0], class_=tags['name_tag'][1])
         prod_price = item.find(
-            'span', class_='andes-money-amount__fraction')
-        prod_cuotas = item.find('span', class_="ui-search-item__group__element shops__items-group-details ui-search-installments ui-search-color--LIGHT_GREEN")
-        
+            tags['price_tag'][0], class_=tags['price_tag'][1])
+        prod_cuotas = item.find('span', class_=tags['cuotas_tag'])
         #price validation
         if prod_price is None:
             prod_price_f = 'sin precio'
@@ -59,7 +73,6 @@ def parse_page(s, brand, tienda):
 
         def line_type(name):
             for n in lines[brand]:
-
                 if n.lower() in name.lower():
                     return n
         def get_cuotas(prod):
@@ -69,7 +82,7 @@ def parse_page(s, brand, tienda):
                 return prod.text.strip()
                      
         page_data.append([tienda, brand, line_type(prod_name.text.strip()), prod_name.text.strip(), 
-                          prod_price_f, prod_link["href"], get_cuotas(prod_cuotas)])
+                          prod_price_f, f'www.todogriferia.com{prod_link["href"]}' if tienda=='Todo Griferia' else prod_link["href"], get_cuotas(prod_cuotas)])
     return page_data
     
 # saving to excel file
@@ -100,6 +113,6 @@ def save_xls(tienda):
             print('saving to file...')
             wb.save('Precios.xlsx')
 
-tiendas = ['Sanitarios Arrieta',]
-for tienda in tiendas:
+for tienda in vendordata.keys():
+    print(tienda)
     save_xls(tienda)
