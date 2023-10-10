@@ -14,14 +14,17 @@ def get_page(brand):
         try:
             print(f'descargando desde {page}')
             response = requests.get(page)
-        except:
-            print('Page not found')
-            continue
+        except requests.exceptions.HTTPError as err:
+            print(err)
+            break
+        print('parsing html')
         s = bs4.BeautifulSoup(response.text, 'lxml')
         if s.find_all('a') == []:
             print(f'end of {brand} pages')
             break
-        print('parsing html')
+        prod_data += parse_page(s, brand)
+        print('next page download in 2 seconds...')
+        time.sleep(2)
         return parse_page(s, brand)
 
 def parse_page(s, brand):
@@ -39,14 +42,14 @@ def parse_page(s, brand):
                 if n.lower() in name.lower():
                     return n         
         prod_data.append([tienda, brand, line_type(prod_name.text.strip()), prod_name.text.strip(), 
-                          prod_price.text.strip()[1:].replace(',','').replace('.',','), f'www.todogriferia.com{prod_link["href"]}'])
+                          prod_price.text.strip()[1:], f'www.todogriferia.com{prod_link["href"]}'])
     return prod_data
     
 
 # saving to excel file
 def save_xls():
 
-    brands = ['ferrum', 'fv', 'hidromet', 'peirano', 'vite', 'cerro', 'ilva', 'tendenza', 'alberdi', ]
+    brands = ['ferrum', 'fv', 'hidromet', 'peirano', 'vite', 'cerro', 'roca', 'ilva', 'tendenza', 'alberdi', ]
     
     for brand in brands:
         data = get_page(brand)

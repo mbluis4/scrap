@@ -30,7 +30,7 @@ def get_page(brand):
             break
         print('parsing html')
         prod_data += parse_page(s, brand)
-        print('next page download in 5 seconds...')
+        print('next page download in 2 seconds...')
         time.sleep(2)
     return prod_data
     
@@ -60,7 +60,7 @@ def parse_page(s, brand):
 # saving to excel file
 def save_xls():
 
-    brands = ['ferrum', 'fv', 'hidromet', 'peirano', 'vite', 'cerro', 'ilva', 'tendenza', 'alberdi', ]
+    brands = ['ferrum', 'fv', 'hidromet', 'peirano', 'vite', 'cerro', 'roca', 'ilva', 'tendenza', 'alberdi', ]
     
     for brand in brands:
         data = get_page(brand)
