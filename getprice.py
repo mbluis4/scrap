@@ -1,7 +1,7 @@
 import requests, os, time, re, bs4, lxml
 from datetime import datetime
 from openpyxl import Workbook, load_workbook
-from data.lines import lines
+from data.lines import lines, brands
 from data.vendors import vendordata
 
 
@@ -17,7 +17,7 @@ def get_page(tienda, brand):
                 urls.append(f'{base_url}{brand}&start=0&sz=500')
 
             case 'Sanitarios Arrieta':
-                for web_page in range(0,1): #36
+                for web_page in range(0,36): #36
                     urls.append(f'{base_url}{brand}_Desde_{web_page*50+1}')   
     
             case 'Tucson':
@@ -42,9 +42,7 @@ def get_page(tienda, brand):
             break
         print('parsing html')
         s = bs4.BeautifulSoup(response.text, 'lxml')
-        # arrieta: s.find('div', class_=tags['main_tag']))
-        if s.find_all('div', class_=vendordata[tienda]['main_tag']) == []:
-            
+        if s.find_all('div', class_=vendordata[tienda]['main_tag']) == []:            
             print(f'end of {brand} pages')
             break
         prod_data += parse_page(s, brand, tienda)
@@ -88,33 +86,24 @@ def parse_page(s, brand, tienda):
 # saving to excel file
 def save_xls(tienda):
     now  = datetime.today().strftime('%d-%m-%Y')
-
-    brands = ['ferrum', 'fv', 'hidromet', 'peirano', 'vite', 'cerro', 'roca', 'ilva', 'tendenza', 'alberdi', ]
-    #brands = ['cerro']
-    
+ 
     for brand in brands:
         data = get_page(tienda, brand)
-
         if f'Precios_{str(now)}.xlsx' in os.listdir('.'):
             wb = load_workbook(filename=f'Precios_{str(now)}.xlsx')
             ws = wb.active
             for row in data[1:]:
                 ws.append(row)
-            print('loading file...')
             print('saving to file...')
-            wb.save(f'Precios_{str(now)}.xlsx')
-                
+            wb.save(f'Precios_{str(now)}.xlsx')               
         else:        
             wb = Workbook()
             ws = wb.active
             for row in data:
                 ws.append(row)
-            print('creating...')
-            print('saving to file...')
+            print('creating and saving to file...')
             wb.save(f'Precios_{str(now)}.xlsx')
 
-#for tienda in vendordata.keys():
-#    print(f'Descargando {tienda}')
-#    save_xls(tienda)
-
-save_xls('Banchero')
+for tienda in vendordata.keys():
+    print(f'Descargando precios de {tienda}')
+    save_xls(tienda)

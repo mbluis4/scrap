@@ -1,3 +1,5 @@
+brands = ['ferrum', 'fv', 'hidromet', 'peirano', 'vite', 'cerro', 'roca', 'ilva', 'tendenza', 'alberdi', ]
+
 lines = {
     'fv': [
     'california',
