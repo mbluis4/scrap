@@ -1,7 +1,7 @@
 from flask import Flask, send_from_directory
 from flask import request
 from flask_cors import CORS, cross_origin
-from services.getprice import save_xls
+from getprice import save_xls
 from data.vendors import vendordata
 
 

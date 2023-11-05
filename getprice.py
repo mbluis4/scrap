@@ -24,29 +24,29 @@ def get_page(tienda, brand):
         urls = []
         match tienda:
             case 'Todo Griferia':
-                urls.append(f'{base_url}{brand}&start=0&sz=12')  # 500
+                urls.append(f'{base_url}{brand}&start=0&sz=500')  # 500
 
             case 'Sanitarios Arrieta':
-                for web_page in range(0, 1):  # 0-36
+                for web_page in range(0, 36):  # 0-36
                     urls.append(f'{base_url}{brand}_Desde_{web_page*50+1}')
 
             case 'Tucson':
-                for web_page in range(1, 2):  # 1-33
+                for web_page in range(1, 33):  # 1-33
                     urls.append(f'{base_url}{web_page}/?q={brand}')
 
             case 'Blaisten':
-                for web_page in range(1, 2):  # 1-9
+                for web_page in range(1, 9):  # 1-9
                     urls.append(f'{base_url}ft={brand}&PageNumber={web_page}')
 
             case 'Banchero':
-                for web_page in range(0, 1):  # 0-13
+                for web_page in range(0, 13):  # 0-13
                     urls.append(f'{base_url}{brand}_Desde_{web_page*50+1}')
             case 'Bercomat':
-                urls.append(f'{base_url}{brand}&start=0&sz=12')  # 600
+                urls.append(f'{base_url}{brand}&start=0&sz=600')  # 600
             case 'Acon':
                 for web_page in range(1, 3):
                     urls.append(
-                        f'{base_url}{web_page}/?s={brand}&post_type=product&dgwt_wcas=1')  # 600
+                        f'{base_url}{web_page}/?s={brand}&post_type=product&dgwt_wcas=1')
 
         return urls
     for page in get_urls(tienda, brand):
@@ -84,8 +84,8 @@ def parse_page(s, brand, tienda):
         if prod_price is None:
             prod_price_f = 'sin precio'
         else:
-            price_regex = re.compile(r'\d+[,|.]?\d+[,|.]?\d+[,]?\d+')
-            prod_price_f = price_regex.search(prod_price.text).group()
+            price_regex = re.compile(r'\b\d[\d,.]*\b')
+            prod_price_f = price_regex.search(prod_price.text.strip()).group()
 
         def line_type(name):
             for n in lines[brand]:
@@ -134,9 +134,9 @@ def save_xls(tienda):
             wb.save(f'Precios_{str(now)}.xlsx')
 
 
-# if __name__ == '__main__':
-#    for tienda in vendordata.keys():
-#        print(f'Descargando precios de {tienda}')
-#        save_xls(tienda)
+if __name__ == '__main__':
+    for tienda in vendordata.keys():
+        print(f'Descargando precios de {tienda}')
+        save_xls(tienda)
 
-save_xls('Acon')
+# save_xls('Banchero')
