@@ -10,6 +10,10 @@ from data.lines import lines, brands
 from data.vendors import vendordata
 
 
+def lambda_handler(event, context):
+    return
+
+
 def get_page(tienda, brand):
     prod_data = [
         [tienda, 'Marca', 'Linea', 'Nombre', 'Precio', 'Link', 'Cuotas'],
@@ -37,6 +41,9 @@ def get_page(tienda, brand):
             case 'Banchero':
                 for web_page in range(0, 13):  # 0-13
                     urls.append(f'{base_url}{brand}_Desde_{web_page*50+1}')
+            case 'Bercomat':
+                urls.append(f'{base_url}{brand}&start=0&sz=600')
+
         return urls
     for page in get_urls(tienda, brand):
         try:
@@ -74,6 +81,7 @@ def parse_page(s, brand, tienda):
         else:
             price_regex = re.compile(r'\w+[,|.]?\w+')
             prod_price_f = price_regex.search(prod_price.text).group()
+        print(prod_price_f)
 
         def line_type(name):
             for n in lines[brand]:
@@ -114,7 +122,9 @@ def save_xls(tienda):
             wb.save(f'Precios_{str(now)}.xlsx')
 
 
-if __name__ == '__main__':
-    for tienda in vendordata.keys():
-        print(f'Descargando precios de {tienda}')
-        save_xls(tienda)
+# if __name__ == '__main__':
+#    for tienda in vendordata.keys():
+#        print(f'Descargando precios de {tienda}')
+#        save_xls(tienda)
+
+save_xls('Bercomat')
