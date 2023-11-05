@@ -24,25 +24,29 @@ def get_page(tienda, brand):
         urls = []
         match tienda:
             case 'Todo Griferia':
-                urls.append(f'{base_url}{brand}&start=0&sz=500')  # 500
+                urls.append(f'{base_url}{brand}&start=0&sz=12')  # 500
 
             case 'Sanitarios Arrieta':
-                for web_page in range(0, 36):  # 0-36
+                for web_page in range(0, 1):  # 0-36
                     urls.append(f'{base_url}{brand}_Desde_{web_page*50+1}')
 
             case 'Tucson':
-                for web_page in range(1, 33):  # 1-33
+                for web_page in range(1, 2):  # 1-33
                     urls.append(f'{base_url}{web_page}/?q={brand}')
 
             case 'Blaisten':
-                for web_page in range(1, 9):  # 1-9
+                for web_page in range(1, 2):  # 1-9
                     urls.append(f'{base_url}ft={brand}&PageNumber={web_page}')
 
             case 'Banchero':
-                for web_page in range(0, 13):  # 0-13
+                for web_page in range(0, 1):  # 0-13
                     urls.append(f'{base_url}{brand}_Desde_{web_page*50+1}')
             case 'Bercomat':
-                urls.append(f'{base_url}{brand}&start=0&sz=600')  # 600
+                urls.append(f'{base_url}{brand}&start=0&sz=12')  # 600
+            case 'Acon':
+                for web_page in range(1, 3):
+                    urls.append(
+                        f'{base_url}{web_page}/?s={brand}&post_type=product&dgwt_wcas=1')  # 600
 
         return urls
     for page in get_urls(tienda, brand):
@@ -76,12 +80,12 @@ def parse_page(s, brand, tienda):
             tags['price_tag'][0], class_=tags['price_tag'][1])
         prod_cuotas = item.find('span', class_=tags['cuotas_tag'])
         # price validation
+        print(prod_price)
         if prod_price is None:
             prod_price_f = 'sin precio'
         else:
             price_regex = re.compile(r'\d+[,|.]?\d+[,|.]?\d+[,]?\d+')
             prod_price_f = price_regex.search(prod_price.text).group()
-        print(prod_price_f)
 
         def line_type(name):
             for n in lines[brand]:
@@ -94,8 +98,16 @@ def parse_page(s, brand, tienda):
             else:
                 return prod.text.strip()
 
+        match tienda:
+            case 'Todo Griferia':
+                prod_link_f = f'www.todogriferia.com{prod_link["href"]}'
+            case 'Bercomat':
+                prod_link_f = f'https://www.familiabercomat.com{prod_link["href"]}'
+            case _:
+                prod_link_f = prod_link["href"]
+
         page_data.append([tienda, brand, line_type(prod_name.text.strip()), prod_name.text.strip(),
-                          prod_price_f, f'www.todogriferia.com{prod_link["href"]}' if tienda == 'Todo Griferia' else prod_link["href"], get_cuotas(prod_cuotas)])
+                          prod_price_f, prod_link_f, get_cuotas(prod_cuotas)])
     return page_data
 
 # saving to excel file
@@ -127,4 +139,4 @@ def save_xls(tienda):
 #        print(f'Descargando precios de {tienda}')
 #        save_xls(tienda)
 
-save_xls('Bercomat')
+save_xls('Acon')

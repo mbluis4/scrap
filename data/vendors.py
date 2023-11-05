@@ -54,6 +54,15 @@ vendordata = {
         'price_tag': ['span', 'sales'],
         'cuotas_tag': '',
     },
+    'Acon':
+    {
+        'id': 8,
+        'base_url': 'https://aconmateriales.com.ar/page/',
+        'main_tag': 'nv-card-content-wrapper',
+        'name_tag': ['h2', 'woocommerce-loop-product__title'],
+        'price_tag': ['bdi', ''],
+        'cuotas_tag': '',
+    },
     # 'Foschia' :
     # {
     #    'id': 1,

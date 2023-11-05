@@ -1,5 +1,6 @@
-# brands = ['ferrum', 'fv', 'hidromet', 'peirano', 'vite', 'cerro', 'roca', 'ilva', 'tendenza', 'alberdi', ]
-brands = ['fv']
+brands = ['ferrum', 'fv', 'hidromet', 'peirano', 'vite',
+          'cerro', 'roca', 'ilva', 'tendenza', 'alberdi', ]
+# brands = ['fv']
 lines = {
     'fv': [
         'california',
