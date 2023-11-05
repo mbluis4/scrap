@@ -24,7 +24,7 @@ def get_page(tienda, brand):
         urls = []
         match tienda:
             case 'Todo Griferia':
-                urls.append(f'{base_url}{brand}&start=0&sz=500')
+                urls.append(f'{base_url}{brand}&start=0&sz=500')  # 500
 
             case 'Sanitarios Arrieta':
                 for web_page in range(0, 36):  # 0-36
@@ -42,7 +42,7 @@ def get_page(tienda, brand):
                 for web_page in range(0, 13):  # 0-13
                     urls.append(f'{base_url}{brand}_Desde_{web_page*50+1}')
             case 'Bercomat':
-                urls.append(f'{base_url}{brand}&start=0&sz=600')
+                urls.append(f'{base_url}{brand}&start=0&sz=600')  # 600
 
         return urls
     for page in get_urls(tienda, brand):
@@ -79,7 +79,7 @@ def parse_page(s, brand, tienda):
         if prod_price is None:
             prod_price_f = 'sin precio'
         else:
-            price_regex = re.compile(r'\w+[,|.]?\w+')
+            price_regex = re.compile(r'\d+[,|.]?\d+[,|.]?\d+[,]?\d+')
             prod_price_f = price_regex.search(prod_price.text).group()
         print(prod_price_f)
 
