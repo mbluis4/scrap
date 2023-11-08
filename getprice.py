@@ -6,8 +6,7 @@ import bs4
 import lxml
 from datetime import datetime
 from openpyxl import Workbook, load_workbook
-from data.lines import lines, brands
-from data.vendors import vendordata
+from data import vendordata, lines, brands
 
 
 def lambda_handler(event, context):
