@@ -1,16 +1,63 @@
 import requests
 import os
+import boto3
 import time
 import re
 import bs4
 import lxml
+import tempfile
 from datetime import datetime
-from openpyxl import Workbook, load_workbook
+from openpyxl import Workbook
 from data import vendordata, lines, brands
+
+s3_client = boto3.client('s3')
 
 
 def lambda_handler(event, context):
-    return
+    try:
+
+        id = event['queryStringParameters']['id']
+
+        price_data = []
+        now = datetime.today().strftime('%d-%m-%Y')
+        wb = Workbook()
+        ws = wb.active
+
+        match id:
+            case 'allprices':
+                for tienda in vendordata.keys():
+                    print(f'Descargando precios de {tienda}')
+                    price_data += save_xls(tienda)
+                for row in price_data[1:]:
+                    ws.append(row)
+            case 'Acon':
+                save_xls('Acon')
+
+        print('saving to file...')
+        with tempfile.NamedTemporaryFile(delete=False) as tmpfile:
+            filename = tmpfile.name
+        wb.save(tmpfile)
+        # Bucket
+        bucket_name = 'faucetsprices2023'
+        object_key = f'Precios_{str(now)}.xlsx'
+
+        # Upload file to S3
+        s3_client.upload_file(filename, bucket_name, object_key)
+
+        # Generate a pre-signed URL for the uploaded file
+        expiration_time = 3600  # URL expiration time in seconds (1 hour)
+        presigned_url = s3_client.generate_presigned_url('get_object', Params={
+                                                         'Bucket': bucket_name, 'Key': object_key}, ExpiresIn=expiration_time)
+
+        return {
+            'statusCode': 200,
+            'body': presigned_url
+        }
+    except Exception as e:
+        return {
+            'statusCode': 500,
+            'body': str(e)
+        }
 
 
 def get_page(tienda, brand):
@@ -79,7 +126,7 @@ def parse_page(s, brand, tienda):
             tags['price_tag'][0], class_=tags['price_tag'][1])
         prod_cuotas = item.find('span', class_=tags['cuotas_tag'])
         # price validation
-        print(prod_price)
+
         if prod_price is None:
             prod_price_f = 'sin precio'
         else:
@@ -113,29 +160,11 @@ def parse_page(s, brand, tienda):
 
 
 def save_xls(tienda):
-    now = datetime.today().strftime('%d-%m-%Y')
+    vendor_data = []
 
     for brand in brands:
-        data = get_page(tienda, brand)
-        if f'Precios_{str(now)}.xlsx' in os.listdir('.'):
-            wb = load_workbook(filename=f'Precios_{str(now)}.xlsx')
-            ws = wb.active
-            for row in data[1:]:
-                ws.append(row)
-            print('saving to file...')
-            wb.save(f'Precios_{str(now)}.xlsx')
-        else:
-            wb = Workbook()
-            ws = wb.active
-            for row in data:
-                ws.append(row)
-            print('creating and saving to file...')
-            wb.save(f'Precios_{str(now)}.xlsx')
+        vendor_data += get_page(tienda, brand)
+    return vendor_data
 
-
-if __name__ == '__main__':
-    for tienda in vendordata.keys():
-        print(f'Descargando precios de {tienda}')
-        save_xls(tienda)
 
 # save_xls('Banchero')
