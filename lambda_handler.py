@@ -24,19 +24,22 @@ def lambda_handler(event, context):
         ws = wb.active
 
         match id:
-            case 'allprices':
+            case 'allvendors':
                 for tienda in vendordata.keys():
                     print(f'Descargando precios de {tienda}')
                     price_data += save_xls(tienda)
-                for row in price_data[1:]:
+                for row in price_data:
                     ws.append(row)
-            case 'Acon':
-                save_xls('Acon')
+            case _:
+                price_data += save_xls(vendordata[id])
+                print(f'Descargando precios de {vendordata[id]}')
+                for row in price_data:
+                    ws.append(row)
 
         print('saving to file...')
         with tempfile.NamedTemporaryFile(delete=False) as tmpfile:
             filename = tmpfile.name
-        wb.save(tmpfile)
+            wb.save(tmpfile)
         # Bucket
         bucket_name = 'faucetsprices2023'
         object_key = f'Precios_{str(now)}.xlsx'
@@ -104,13 +107,13 @@ def get_page(tienda, brand):
             print(err)
             break
         print('parsing html')
-        s = bs4.BeautifulSoup(response.text, 'lxml')
+        s = bs4.BeautifulSoup(response.text, "html.parser")
         if s.find_all('div', class_=vendordata[tienda]['main_tag']) == []:
             print(f'end of {brand} pages')
             break
         prod_data += parse_page(s, brand, tienda)
         print('next page download in 2 seconds...')
-        time.sleep(1)
+        # time.sleep(1)
     return prod_data
 
 

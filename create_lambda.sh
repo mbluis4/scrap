@@ -1,0 +1,1 @@
+ aws lambda create-function --function-name getPrices --runtime python3.10 --handler lambda_handler.lambda_handler --role arn:aws:iam::111122223333:role/service-role/my-lambda-role --zip-file fileb://my_deployment_package.zip
