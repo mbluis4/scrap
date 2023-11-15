@@ -31,7 +31,7 @@ def lambda_handler(event, context):
                 for row in price_data:
                     ws.append(row)
             case _:
-                price_data += save_xls(vendordata[id])
+                price_data += save_xls(id)
                 print(f'Descargando precios de {vendordata[id]}')
                 for row in price_data:
                     ws.append(row)
