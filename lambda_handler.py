@@ -130,11 +130,15 @@ def parse_page(s, brand, tienda):
         prod_cuotas = item.find('span', class_=tags['cuotas_tag'])
         # price validation
 
-        if prod_price is None:
-            prod_price_f = 'sin precio'
+        # if prod_price is None:
+        #    prod_price_f = 'sin precio'
+        # else:
+        price_regex = re.compile(r'\b\d[\d,.]*\b')
+        if re.search(price_regex, prod_price.text.strip()) != None:
+            prod_price_f = price_regex.search(
+                prod_price.text.strip()).group()
         else:
-            price_regex = re.compile(r'\b\d[\d,.]*\b')
-            prod_price_f = price_regex.search(prod_price.text.strip()).group()
+            prod_price_f = 'sin precio'
 
         def line_type(name):
             for n in lines[brand]:
