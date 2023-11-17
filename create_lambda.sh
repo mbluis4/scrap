@@ -3,3 +3,7 @@
  #update
 
  aws lambda update-function-code --function-name getPrices --zip-file fileb://my_deployment_package.zip
+
+ # create api gateway
+
+aws apigatewayv2 create-api --name faucets-api --protocol-type HTTP --target arn:aws:lambda:us-east-1:679602148783:function:getPrices

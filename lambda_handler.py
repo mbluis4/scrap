@@ -134,7 +134,9 @@ def parse_page(s, brand, tienda):
         #    prod_price_f = 'sin precio'
         # else:
         price_regex = re.compile(r'\b\d[\d,.]*\b')
-        if re.search(price_regex, prod_price.text.strip()) != None:
+        if prod_price is None:
+            prod_price_f = 'sin precio'
+        elif re.search(price_regex, prod_price.text.strip()) != None:
             prod_price_f = price_regex.search(
                 prod_price.text.strip()).group()
         else:
