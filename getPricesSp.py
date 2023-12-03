@@ -4,10 +4,12 @@ import bs4
 from openpyxl import load_workbook
 from data import vendordata
 import datetime
+from io import BytesIO
+from tempfile import NamedTemporaryFile
 
 
 def getPrices():
-    wb = load_workbook(filename='test.xlsx')
+    wb = load_workbook(filename='test2.xlsx')
     now = datetime.datetime.now().strftime("%d-%m-%Y %H_%M")
     new_col_title = datetime.datetime.now().strftime("%d-%m-%Y")
 
@@ -29,8 +31,11 @@ def getPrices():
                 s = bs4.BeautifulSoup(response.text, 'lxml')
 
                 ws[f'E{item.row}'] = parse_page(s, vendor)
-    now = datetime.datetime.now().strftime("%d-%m-%Y %H_%M")
-    wb.save(f'Nuevos_Precios_{str(now)}.xlsx')
+    # now = datetime.datetime.now().strftime("%d-%m-%Y %H_%M")
+    with NamedTemporaryFile() as tmp:
+        wb.save(tmp.name)
+        output = BytesIO(tmp.read())
+    return output
     # time.sleep(1)
 
 
@@ -51,6 +56,3 @@ def parse_page(s, vendor):
         prod_price_f = 'sin precio'
 
     return prod_price_f
-
-
-getPrices()
