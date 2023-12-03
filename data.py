@@ -15,7 +15,7 @@ vendordata = {
         'base_url': 'https://www.blaisten.com.ar/buscapagina?PS=25&sl=19ccd66b-b568-43cb-a106-b52f9796f5cd&cc=25&sm=0&',
         'main_tag': 'product-card',
         'name_tag': ['div', 'product-name'],
-        'price_tag': ['span', 'final-price'],
+        'price_tag': ['strong', 'skuBestPrice'],
         'cuotas_tag': '',
     },
     'Todo Griferia':
@@ -33,7 +33,7 @@ vendordata = {
         'base_url': 'https://tienda.tucsonsa.com/search/page/',
         'main_tag': 'item-description',
         'name_tag': ['div', 'js-item-name'],
-        'price_tag': ['span', 'js-price-display'],
+        'price_tag': ['h3', 'js-price-display'],
         'cuotas_tag': '',
     },
     'Banchero':
