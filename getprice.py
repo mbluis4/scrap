@@ -80,7 +80,9 @@ def parse_page(s, brand, tienda):
         prod_cuotas = item.find('span', class_=tags['cuotas_tag'])
         # price validation
         price_regex = re.compile(r'\b\d[\d,.]*\b')
-        if re.search(price_regex, prod_price.text.strip()) != None:
+        if prod_price is None:
+            prod_price_f = 'sin precio'
+        elif re.search(price_regex, prod_price.text.strip()) != None:
             prod_price_f = price_regex.search(
                 prod_price.text.strip()).group()
         else:
@@ -133,9 +135,9 @@ def save_xls(tienda):
             wb.save(f'Precios_{str(now)}.xlsx')
 
 
-# if __name__ == '__main__':
-#    for tienda in vendordata.keys():
-#        print(f'Descargando precios de {tienda}')
-#        save_xls(tienda)
+if __name__ == '__main__':
+    for tienda in vendordata.keys():
+        print(f'Descargando precios de {tienda}')
+        save_xls(tienda)
 
-save_xls('Todo Griferia')
+# save_xls('Todo Griferia')
