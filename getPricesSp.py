@@ -8,7 +8,7 @@ import datetime
 
 
 def getPrices():
-    wb = load_workbook(filename='test.xlsx')
+    wb = load_workbook(filename='test2.xlsx')
     now = datetime.datetime.now().strftime("%d-%m-%Y %H_%M")
     new_col_title = datetime.datetime.now().strftime("%d-%m-%Y")
 
