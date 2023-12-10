@@ -3,11 +3,12 @@ import requests
 import bs4
 from openpyxl import load_workbook
 from data import vendordata
+from send_excel import send_excel
 import datetime
 
 
 def getPrices():
-    wb = load_workbook(filename='test.xlsx')
+    wb = load_workbook(filename='test2.xlsx')
     now = datetime.datetime.now().strftime("%d-%m-%Y %H_%M")
     new_col_title = datetime.datetime.now().strftime("%d-%m-%Y")
 
@@ -31,6 +32,7 @@ def getPrices():
                 ws[f'E{item.row}'] = parse_page(s, vendor)
     now = datetime.datetime.now().strftime("%d-%m-%Y %H_%M")
     wb.save(f'Nuevos_Precios_{str(now)}.xlsx')
+    send_excel([f'Nuevos_Precios_{str(now)}.xlsx'])
     # time.sleep(1)
 
 
