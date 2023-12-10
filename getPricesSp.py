@@ -1,6 +1,7 @@
 import re
 import requests
 import bs4
+from os.path import basename
 from openpyxl import load_workbook
 from data import vendordata
 from send_excel import send_excel
@@ -31,8 +32,9 @@ def getPrices():
 
                 ws[f'E{item.row}'] = parse_page(s, vendor)
     now = datetime.datetime.now().strftime("%d-%m-%Y %H_%M")
-    wb.save(f'Nuevos_Precios_{str(now)}.xlsx')
-    send_excel([f'Nuevos_Precios_{str(now)}.xlsx'])
+    excel_file = f'Nuevos_Precios_{str(now)}.xlsx'
+    wb.save(excel_file)
+    send_excel([basename(excel_file)])
     # time.sleep(1)
 
 
