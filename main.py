@@ -1,4 +1,3 @@
-from fastapi.responses import FileResponse
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from getPricesSp import getPrices
@@ -29,14 +28,23 @@ def hello_w():
     }
 
 
+@app.get('/precios')
+def precios():
+    getPrices()
+    return {
+        'body': 'enviado'
+    }
+
+
 @app.get('/gen_excel')
 def get_price():
     try:
-        # Save DataFrame to Excel file
-        excel_file_path = getPrices()
 
-        # Return the Excel file as a response
-        return FileResponse(excel_file_path, filename='output.xlsx', media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        getPrices()
+
+        return {
+            'body': 'your excel file is being generated and will be sent to your email'
+        }
 
     except Exception as e:
         # Handle exceptions, if any
