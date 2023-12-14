@@ -1,4 +1,5 @@
 import smtplib
+from dotenv import dotenv_values
 from os.path import basename
 from email.mime.application import MIMEApplication
 from email.mime.multipart import MIMEMultipart
@@ -7,12 +8,15 @@ from email.utils import COMMASPACE, formatdate
 from datetime import datetime
 import ssl
 
+gmail_cred = dotenv_values('.env')
+
+email_sender = gmail_cred['GMAIL_SENDER']
+email_password = gmail_cred['GMAIL_PASSWORD']
+email_receiver = gmail_cred['GMAIL_RECEIVER']
+
 
 def send_excel(files):
     now = datetime.today().strftime('%d-%m-%Y')
-    email_sender = 'devluen@gmail.com'
-    email_password = 'xjovjrjjbciawfyc'
-    email_receiver = 'mbluis@gmail.com'
 
     subject = f'Nuevos_precios_{now}'
 
