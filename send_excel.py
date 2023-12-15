@@ -8,7 +8,7 @@ from email.utils import COMMASPACE, formatdate
 from datetime import datetime
 import ssl
 
-gmail_cred = dotenv_values('.env')
+gmail_cred = dotenv_values('.env.example')
 
 email_sender = gmail_cred['GMAIL_SENDER']
 email_password = gmail_cred['GMAIL_PASSWORD']
@@ -42,3 +42,6 @@ def send_excel(files):
     with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
         smtp.login(email_sender, email_password)
         smtp.sendmail(email_sender, email_receiver, em.as_string())
+
+
+print(email_sender)
