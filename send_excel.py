@@ -8,7 +8,7 @@ from email.utils import formatdate
 from datetime import datetime
 import ssl
 
-gmail_cred = dotenv_values('.env.example')
+gmail_cred = dotenv_values('.env.mail')
 
 email_sender = gmail_cred['GMAIL_SENDER']
 email_password = gmail_cred['GMAIL_PASSWORD']
