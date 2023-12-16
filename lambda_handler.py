@@ -1,49 +1,48 @@
 import requests
-import boto3
 import re
 import bs4
-import lxml
-from os.path import basename
-import tempfile
 from datetime import datetime
 from openpyxl import Workbook
 from data import vendordata, lines, brands
 from send_excel import send_excel
-from email.message import EmailMessage
-from email.mime.application import MIMEApplication
+from getPricesSp import getPrices
 
-s3_client = boto3.client('s3')
+# s3_client = boto3.client('s3')
 now = datetime.today().strftime('%d-%m-%Y')
 
 
 def lambda_handler(event, context):
+    # print(event)
     try:
-
         id = event['queryStringParameters']['id']
-
-        price_data = []
-
-        wb = Workbook()
-        ws = wb.active
-
+        file_to_send = ''
+        print(id)
         match id:
             case 'allvendors':
+                price_data = []
+                wb = Workbook()
+                ws = wb.active
                 for tienda in vendordata.keys():
                     print(f'Descargando precios de {tienda}')
-                    price_data += save_xls(tienda)
+                    for brand in brands:
+                        price_data += get_page(tienda, brand)
                 for row in price_data:
                     ws.append(row)
-            case _:
-                price_data += save_xls(id)
-                print(f'Descargando precios de {vendordata[id]}')
-                for row in price_data:
-                    ws.append(row)
-        send_excel([basename(wb.save(f'Nuevos_precios_{now}.xlsx'))])
+                file_to_send = f'Precios_totales_{now}'
+                wb.save(file_to_send)
+            case 'products1':
+                print(f'here')
+                file_to_send = getPrices()
 
-        print('saving to file...')
+        send_excel([file_to_send])
+
+        print('el archivo fue enviado a su email')
+
+        """
         with tempfile.NamedTemporaryFile(delete=False) as tmpfile:
             filename = tmpfile.name
             wb.save(tmpfile)
+        send_excel([filename])
         # Bucket
         bucket_name = 'faucetsprices2023'
         object_key = f'Precios_{str(now)}.xlsx'
@@ -56,9 +55,11 @@ def lambda_handler(event, context):
         presigned_url = s3_client.generate_presigned_url('get_object', Params={
                                                          'Bucket': bucket_name, 'Key': object_key}, ExpiresIn=expiration_time)
 
+        """
+
         return {
             'statusCode': 200,
-            'body': presigned_url
+            'body': 'archivo enviado'
         }
     except Exception as e:
         return {
@@ -172,12 +173,19 @@ def parse_page(s, brand, tienda):
 # saving to excel file
 
 
+"""
 def save_xls(tienda):
     vendor_data = []
 
     for brand in brands:
         vendor_data += get_page(tienda, brand)
     return vendor_data
+"""
 
+test_str = {'queryStringParameters': {
+    'id': 'products1'
+}}
 
-# save_xls('Banchero')
+lambda_handler(test_str, 'test')
+
+# print(type(test_str['queryStringParameters']['id']))

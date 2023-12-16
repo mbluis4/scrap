@@ -9,7 +9,7 @@ import datetime
 
 
 def getPrices():
-    wb = load_workbook(filename='test2.xlsx')
+    wb = load_workbook(filename='test.xlsx')
     now = datetime.datetime.now().strftime("%d-%m-%Y %H_%M")
     new_col_title = datetime.datetime.now().strftime("%d-%m-%Y")
 
@@ -32,6 +32,7 @@ def getPrices():
 
                 ws[f'E{item.row}'] = parse_page(s, vendor)
     now = datetime.datetime.now().strftime("%d-%m-%Y %H_%M")
+    # send file by email
     excel_file = f'Nuevos_Precios_{str(now)}.xlsx'
     wb.save(excel_file)
     send_excel([basename(excel_file)])
@@ -55,6 +56,3 @@ def parse_page(s, vendor):
         prod_price_f = 'sin precio'
 
     return prod_price_f
-
-
-getPrices()
