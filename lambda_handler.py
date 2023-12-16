@@ -183,7 +183,7 @@ def save_xls(tienda):
 """
 
 test_str = {'queryStringParameters': {
-    'id': 'products1'
+    'id': 'allvendors'
 }}
 
 lambda_handler(test_str, 'test')

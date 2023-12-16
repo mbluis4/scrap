@@ -1,4 +1,5 @@
 
+
 vendordata = {
     'Sanitarios Arrieta':
     {
@@ -69,7 +70,20 @@ vendordata = {
     #    'base_url': 'https://foschia.com.ar/search/all/'
     # },
 }
+"""
 
+vendordata = {
+    'Banchero':
+    {
+        'id': 6,
+        'base_url': 'https://www.tienda.bancherosanitarios.com.ar/',
+        'main_tag': 'ui-search-result__content-wrapper shops__result-content-wrapper',
+        'name_tag': ['h2', 'ui-search-item__title'],
+        'price_tag': ['span', 'andes-money-amount__fraction'],
+        'cuotas_tag': 'ui-search-item__group__element shops__items-group-details ui-search-installments ui-search-color--LIGHT_GREEN',
+    },
+}
+"""
 vendordatacyber = {
     'Sanitarios Arrieta':
     {
