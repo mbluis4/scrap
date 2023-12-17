@@ -35,7 +35,7 @@ def getPrices():
     # send file by email
     excel_file = f'Nuevos_Precios_{str(now)}.xlsx'
     wb.save(excel_file)
-    send_excel([basename(excel_file)])
+    return basename(excel_file)
     # time.sleep(1)
 
 
