@@ -28,7 +28,7 @@ def getPrices():
                     print(err)
                     continue
                 print('parsing html')
-                s = bs4.BeautifulSoup(response.text, 'lxml')
+                s = bs4.BeautifulSoup(response.text, 'html.parser')
 
                 ws[f'E{item.row}'] = parse_page(s, vendor)
     now = datetime.datetime.now().strftime("%d-%m-%Y %H_%M")
