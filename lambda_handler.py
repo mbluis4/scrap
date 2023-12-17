@@ -180,7 +180,6 @@ def save_xls(tienda):
     for brand in brands:
         vendor_data += get_page(tienda, brand)
     return vendor_data
-"""
 
 test_str = {'queryStringParameters': {
     'id': 'allvendors'
@@ -188,4 +187,5 @@ test_str = {'queryStringParameters': {
 
 lambda_handler(test_str, 'test')
 
+"""
 # print(type(test_str['queryStringParameters']['id']))
