@@ -57,7 +57,7 @@ def get_page(tienda, brand):
             print(err)
             break
         print('parsing html')
-        s = bs4.BeautifulSoup(response.text, 'lxml')
+        s = bs4.BeautifulSoup(response.text, 'html.parser')
         if s.find_all('div', class_=vendordata[tienda]['main_tag']) == []:
             print(f'end of {brand} pages')
             break
