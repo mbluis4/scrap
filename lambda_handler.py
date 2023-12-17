@@ -1,7 +1,4 @@
 import requests
-import os
-import boto3
-import time
 import re
 import bs4
 import lxml
@@ -10,7 +7,7 @@ from datetime import datetime
 from openpyxl import Workbook
 from data import vendordata, lines, brands
 
-s3_client = boto3.client('s3')
+# s3_client = boto3.client('s3')
 
 
 def lambda_handler(event, context):
@@ -40,6 +37,7 @@ def lambda_handler(event, context):
         with tempfile.NamedTemporaryFile(delete=False) as tmpfile:
             filename = tmpfile.name
             wb.save(tmpfile)
+        """
         # Bucket
         bucket_name = 'faucetsprices2023'
         object_key = f'Precios_{str(now)}.xlsx'
@@ -52,6 +50,7 @@ def lambda_handler(event, context):
         presigned_url = s3_client.generate_presigned_url('get_object', Params={
                                                          'Bucket': bucket_name, 'Key': object_key}, ExpiresIn=expiration_time)
 
+        """
         return {
             'statusCode': 200,
             'body': presigned_url
