@@ -53,7 +53,7 @@ def lambda_handler(event, context):
         """
         return {
             'statusCode': 200,
-            'body': presigned_url
+            'body': 'success'
         }
     except Exception as e:
         return {
