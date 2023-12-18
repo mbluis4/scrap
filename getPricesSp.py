@@ -4,12 +4,11 @@ import bs4
 from os.path import basename
 from openpyxl import load_workbook
 from data import vendordata
-from send_excel import send_excel
 import datetime
 
 
 def getPrices():
-    wb = load_workbook(filename='test.xlsx')
+    wb = load_workbook(filename='test2.xlsx')
     now = datetime.datetime.now().strftime("%d-%m-%Y %H_%M")
     new_col_title = datetime.datetime.now().strftime("%d-%m-%Y")
 
@@ -33,9 +32,10 @@ def getPrices():
                 ws[f'E{item.row}'] = parse_page(s, vendor)
     now = datetime.datetime.now().strftime("%d-%m-%Y %H_%M")
     # send file by email
-    excel_file = f'Nuevos_Precios_{str(now)}.xlsx'
+    excel_file = f'/tmp/Nuevos_Precios_{str(now)}.xlsx'
     wb.save(excel_file)
-    return basename(excel_file)
+    print(f'file: {excel_file}')
+    return excel_file
     # time.sleep(1)
 
 

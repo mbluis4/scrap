@@ -6,6 +6,7 @@ from openpyxl import Workbook
 from data import vendordata, lines, brands
 from send_excel import send_excel
 from getPricesSp import getPrices
+import os
 
 # s3_client = boto3.client('s3')
 now = datetime.today().strftime('%d-%m-%Y')
@@ -31,12 +32,12 @@ def lambda_handler(event, context):
                 file_to_send = f'Precios_totales_{now}'
                 wb.save(file_to_send)
             case 'products1':
-                print(f'here')
                 file_to_send = getPrices()
 
         send_excel([file_to_send])
 
         print('el archivo fue enviado a su email')
+        os.remove(file_to_send)
 
         """
         with tempfile.NamedTemporaryFile(delete=False) as tmpfile:
