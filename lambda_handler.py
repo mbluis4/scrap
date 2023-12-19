@@ -33,6 +33,11 @@ def lambda_handler(event, context):
                 wb.save(file_to_send)
             case 'products1':
                 file_to_send = getPrices()
+            case 'test':
+                return {
+                    'statusCode': 200,
+                    'body': 'success!'
+                }
 
         send_excel([file_to_send])
 
