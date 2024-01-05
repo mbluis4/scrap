@@ -7,6 +7,7 @@ from data import vendordata, lines, brands
 from send_excel import send_excel
 from getPricesSp import getPrices
 import os
+import json
 
 # s3_client = boto3.client('s3')
 now = datetime.today().strftime('%d-%m-%Y')
@@ -34,9 +35,12 @@ def lambda_handler(event, context):
             case 'products1':
                 file_to_send = getPrices()
             case 'test':
+                body_data = {
+                    'message': 'test successful'
+                }
                 return {
                     'statusCode': 200,
-                    'body': 'success!'
+                    'body': json.dumps(body_data)
                 }
 
         send_excel([file_to_send])
